@@ -8,5 +8,6 @@ urlpatterns = [
     url('',views.home,name = 'home'),
     url(r'^new_projects/$', views.new_projects, name='new_projects'),
     url(r'^projects/(\d+)',views.projects,name='projects'),
+    url(r'profile',views.profile, name='profile'),
 
 ]
