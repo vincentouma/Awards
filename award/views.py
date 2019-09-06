@@ -14,6 +14,20 @@ def home(request):
     return render(request, 'home.html',
     )
 
+def profile(request):
+    if request.method == 'POST':
+        form = ProjectForm(request.POST,request.FILES)
+
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+            return render(request, 'profile.html')
+    else:
+        form = ProjectsForm()
+
+        my_profile = Profile.objects.all()
+    return render(request,'profile.html', locals())    
+
 
 def new_projects(request):
     current_user = request.user
