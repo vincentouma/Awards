@@ -13,3 +13,20 @@ def home(request):
    
     return render(request, 'home.html',
     )
+
+
+def new_projects(request):
+    current_user = request.user
+    profile = Profile.objects.get(user=current_user)
+    if request.method == 'POST':
+        form = ProjectForm(request.POST, request.FILES)
+        if form.is_valid():
+            project = form.save(commit=False)
+            project.user = current_user
+            project.profile = profile
+            project.save()
+        return redirect('index')
+
+    else:
+        form = ProjectsForm()
+    return render(request, 'new_project.html', {"form": form})
