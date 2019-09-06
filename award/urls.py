@@ -6,5 +6,6 @@ from . import views
 
 urlpatterns = [
     url('',views.home,name = 'home'),
+    url(r'^new_projects/$', views.new_projects, name='new_projects'),
 
 ]
