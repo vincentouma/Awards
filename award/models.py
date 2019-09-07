@@ -87,4 +87,7 @@ class Comment(models.Model):
         self.delete()
 
     class Meta:
-        ordering = ["-id"]        
+        ordering = ["-id"]
+
+        
+                
