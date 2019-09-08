@@ -55,7 +55,7 @@ class Profile(models.Model):
         return profiles
 
     def __str__(self):
-        return self.user.username
+        return self.user_id.username
 
 
 class Rates(models.Model):
