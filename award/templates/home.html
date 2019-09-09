@@ -18,78 +18,75 @@
         <button style="border:0px;" type="submit" class="formButton">Search</button>
       </form>
     </div>
-    <div>
-      <br>
-      <br>
-      <br>
-      <div  class="row">
-  
-        {% for photos_item in photos %}
-        <div class="col-md-6">
-          <div  class="card">
-            <div class="card-title">
-              {% if photos_item.profile.profile_pic %}
-              <section data-toggle="modal" data-target="#modalLoginAvatar"> <img style="border-radius: 50% ; padding: 0.15rem;  width: 45px; background: linear-gradient(to right bottom, #2cd88888, #2ec96970);" class=" img-circle" src="{{ photos_item.profile.profile_pic.url}}"
-                  alt="" width="50px" height="50px"> <a href="/profiles/ {{ photos_item.profile.user.id}}" style=" color:black">{{ photos_item.profile.user.username}}</a> </section> <br>
-              {% else %}
-              <img data-toggle="modal" data-target="#modalLoginAvatar" style="border-radius: 50% ; padding: 0.15rem;  width: 45px; background: linear-gradient(to right bottom, #2cd88888, #2ec96970);" class=" img-circle" src="https://www.bristolbrewing.com/wp-content/uploads/2017/08/default-avatar.png"
-                alt="" width="50px" height="50px"> <a href="/profiles/ {{ photos_item.profile.user.id}}" style=" color:black">{{ photos_item.profile.user.username}}</a></section> <br>
-  
-              {% endif %}
-            </div>
-  
-            <p>{{ photos_item.image_caption | truncatechars:100 }}</p>
-  
-            <a href="/projects/{{ photos_item.id}}">
-              <p style="text-align: center;"><img data-image-id="{{photos_item.id}}" data-toggle="modal" data-target="#{{photos_item.id}}" class="" src="{{photos_item.image.url}}" alt="pic" height="410px" width="620px"></p>
-            </a>
-  
-           
-            <h4>Reviews</h4>
-            <h6 class="Reviews">
-  
-              {% for review in photos_item.comments.all %}
-              <h6 class="">
-                <a class="user">
-                  <em>{{ review.user.username }}</em>
-                </a>
-                <span class="">{{ review.comment }}</span>
-              </h6>
-              {% endfor %}
-  
-  
-  
-              {% if request.user.is_authenticated %}
-              <section class="input-row">
-                <i class="" aria-hidden="true"></i>
-                <div class="comment-input-wrapper">
-                  <form action="{% url 'comment' image_id=photos_item.id %}" method="post">
-                    {% csrf_token %}
-                    {% bootstrap_form comm %}
-                    <!-- <button type='submit' class='btn btn-primary'>Review</button> -->
-                  </form>
-                </div>
-                <div class="hidden-data {{ image.pk }}" style="display: none;">
-                  <span class="image-pk">{{ image.pk }}</span>
-                </div>
-              </section>
-              {% endif %}
-  
-            </h6>
-            <!--  -->
-  
-          </div>
-        </div>
-        <br>
-        <br>
-        <br>
-        <br>
-        {% endfor %}
-        <br>
-        <br>
-      </div>
-    </div>
-  
+    <div style=" height:4px;">
+      <!-- <img src="http://pluspng.com/img-png/gold-award-png-accolade-merit-logo-gold-award-2017.png" style="width: 10%; padding: 10px; position: center" class="text-center">      -->
+       <h1 class="text-center heading"><i class="fas fa-award"  style="margin-top:50px;"></i  style="margin-top:30px;"> AWARDS</h1>
+        <h4 class="text-center heading">Our growth depends on your feedback</h4>
+   </div>
+
+
+{% comment %} <style>
+   body {
+       background-color: lawngreen;
+   }
+</style> {% endcomment %}
+
+<div class="container-fluid">
+   
+   <div class="row" style="margin-top:30px;">
+       {% for image in all_images%}
+
+       <div class="col-md-5 main-page d-flex" style=" margin-top: 40px; margin-bottom:50px;">
+           <div class="card card-cascade wider flex-fill ">
+
+               <!-- Card image -->
+               <div class="view view-cascade overlay">
+                   <a data-toggle="modal" data-target="#{{image.id}}"><img class="card-img-top"
+                           src="{{image.image.url}}" alt="{{image.title}}"></a>
+               </div>
+               <!--Card content-->
+               <div class="card-body">
+
+                   <!--Title-->
+                   <h4 class="card-title">{{image.title}}</h4>
+                   <!--Text-->
+                   <p class="card-text">{{image.details}}</p>
+                   <p><a href="{{image.link}}">Live Project Link</a></p>                    
+                   
+                   <a href="{% url 'project_review' image.pk %}" class="btn btn-primary btn-md" target="_blank">Review Project</a>
+
+               </div>
+           </div>
+       </div>
+       <!--Modal: modalYT-->
+       <div class="modal fade" id="{{image.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+           aria-hidden="true">
+           <div class="modal-dialog modal-lg" role="document">                               
+                       <div class="embed-responsive embed-responsive-16by9">
+                           <img class="embed-responsive-item" src="{{image.image.url}}" alt="Image Loading"
+                               style="margin:10px;" allowfullscreen>
+                       </div>                              
+
+           </div>
+       </div>
+       <!--Modal: modalYT-->
+
+
+       {% empty %}
+   
+
+       <div class="container">
+       <div class="row">
+           <h1 class="text-center" style="font-style:italics;"> No Projects Yet</h1>
+       </div>
+       {% endfor %}
+   </div>
+   <!-- Card deck -->
+   <div class="row">
+   </div>
+   
+</div>
+</div>
   
   
   </div>

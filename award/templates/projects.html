@@ -1,38 +1,22 @@
-
-
-
-
 {%extends 'base.html'%}
-{% load bootstrap3 %}
 {% load staticfiles %}
+{% load bootstrap3 %}
 
-
-
-
-{% block content %}
 
 <body>
-    <div class="container">
-
-
-        <div class="card-body">
-                <form  action="/projects/{{post.id}}" method="post" enctype="multipart/form-data">
-                    {%csrf_token%}
-                
-                    { {form} }
-                    <input type="submit" class="btn btn-warning btn-sm" value="Post">
-                </form>
+    <div class="container-fluid">
+        <h3 class="text-center" style="margin-top:10px;">Post Your Project</h3>
+        <div class="card" style="padding:30px;">
+            <form action="{% url 'new-project' %}" method="post" enctype="multipart/form-data">
+                {%csrf_token%}
+                {% bootstrap_form form%}
+                <input type="submit" class="btn btn-success btn-block" value="Submit">
+            </form>
         </div>
     </div>
-
-
-
     {% block scripts %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    {% bootstrap_javascript %}
-    {% endblock %}
+    {% bootstrap_javascript %} {% endblock %}
 </body>
-{% endblock%}
-
 
 </html>

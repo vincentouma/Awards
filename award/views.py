@@ -7,14 +7,14 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from tinymce.models import HTMLField
 from django.core.exceptions import ObjectDoesNotExist
-from .forms import  *
+from .forms import ProjectForm,ProfileForm,VoteForm 
 from .models import *
 # Create your views here.
 
 def home(request):
-   current_user = request.user
-   projects = Projects
-   return render(request,'home.html',{'projects':projects})
+    current_user = request.user
+    all_project = Project.fetch_all_images()
+    return render(request,"home.html",{"all_images":all_project})
     
 @login_required(login_url='/accounts/login/')
 def new_profile(request):
@@ -47,85 +47,60 @@ def profile_edit(request):
 @login_required(login_url='/accounts/login/')
 def profile(request):
     current_user = request.user
-    projects = Projects.objects.filter(user = current_user)
+    project = Project.objects.filter(user = current_user)
 
     try:   
         prof = Profile.objects.get(prof_user=current_user)
     except ObjectDoesNotExist:
         return redirect('new_profile')
 
-    return render(request,'profile/profile.html',{'profile':prof,'projects':projects})
+    return render(request,'profile/profile.html',{'profile':prof,'project':project})
 
 
 @login_required(login_url='/accounts/login/')
-def new_projects(request):
+def new_project(request):
     current_user = request.user
-    profile = Profile.objects.get(prof_user =current_user)
     if request.method == 'POST':
-        form = ProjectsForm(request.POST, request.FILES)
+        form = ProjectForm(request.POST,request.FILES)
         if form.is_valid():
-            project = form.save(commit=False)
-            project.user = current_user
-            project.profile = profile
-            project.save()
-        print(project)
+            user_image = form.save(commit=False)
+            user_image.user = current_user
+            user_image.save()
         return redirect('home')
-
     else:
-        form = ProjectsForm()
-    return render(request, 'new_project.html', {"form": form})
+        form = ProjectForm()
+    return render(request,"projects.html",{"form":form})
 
 @login_required(login_url='/accounts/login/')
-def projects(request,id):    
-    post=Project.objects.get(id=id)
-    votes = Votes.objects.filter(post=post)
-    form = Votess()
-    # Empty list for each of the category of votes
-    design = []
-    usability = []
-    creativity = []
-    content = []
+def project_review(request,project_id):
+    try:
+        single_project = Project.get_single_project(project_id)
+        average_score = round(((single_project.design + single_project.usability + single_project.content)/3),2)
+        if request.method == 'POST':
+            vote_form = VoteForm(request.POST)
+            if vote_form.is_valid():
+                single_project.vote_submissions+=1
+                if single_project.design == 0:
+                    single_project.design = int(request.POST['design'])
+                else:
+                    single_project.design = (single_project.design + int(request.POST['design']))/2
+                if single_project.usability == 0:
+                    single_project.usability = int(request.POST['usability'])
+                else:
+                    single_project.usability = (single_project.usability + int(request.POST['usability']))/2
+                if single_project.content == 0:
+                    single_project.content = int(request.POST['content'])
+                else:
+                    single_project.content = (single_project.content + int(request.POST['usability']))/2
 
-    # For loop to appent the votes to the empty list
-    for vote in votes:
-                design.append(vote.design)
-                usability.append(vote.usability)
-                creativity.append(vote.creativity)
-                content.append(vote.content)
+                single_project.save()
+                return redirect('project_review',project_id)
+        else:
+            vote_form = VoteForm()
 
-    design = []
-    usability = []
-    creativity = []
-    Content = []
-
-    if len(usability)>0:
-            usability = (sum(usability)//len(usability))
-            usability.append(usability)
-    if len(creativity)>0:
-            creativity = (sum(creativity)//len(creativity))
-            creativity.append(creativity)
-    if len(design)>0:
-            design = (sum(design)//len(design))
-            design.append(design)
-    if len(content)>0:
-            content = (sum(content)//len(content))
-            content.append(content)
-    
-    if request.method == 'POST':
-            vote = Votess(request.POST)
-            if vote.is_valid():
-                    design = vote.cleaned_data['design']
-                    usability = vote.cleaned_data['usability']
-                    content = vote.cleaned_data['content']
-                    creativity = vote.cleaned_data['creativity']
-                    rating = Votes(design=design,usability=usability,
-                                    content=content,creativity=creativity,
-                                    user=request.user,post=post)
-                    rating.save()
-                    return redirect('home')
-    return render(request,'projects.html',{"form":form, "design":design, "creativity":creativity, "content":content, "design":design, "usability":usability, "post":post})
-
-
+    except Exception as  e:
+        raise Http404()
+    return render(request,'review.html',{"vote_form":vote_form,"single_project":single_project,"average_score":average_score})
 
 @login_required(login_url='/accounts/login/')
 def search_results(request):
@@ -133,7 +108,7 @@ def search_results(request):
         search_term = request.GET.get("username")
         searched_users = User.objects.filter(username=search_term)
         message = f"{search_term}"
-        profiles=  Profile.objects.all( )
+        profiles=  Profile.objects.all()
 
         return render(request, 'search.html',{"message":message,"users": searched_users,'profiles':profiles})
 

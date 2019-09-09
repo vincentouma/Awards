@@ -9,4 +9,4 @@ from .models import *
 admin.site.register(Profile)
 admin.site.register(Comment)
 admin.site.register(Rates)
-admin.site.register(Projects)
+admin.site.register(Project)
