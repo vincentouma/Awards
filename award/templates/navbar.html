@@ -1,92 +1,54 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
-        aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-        <div>
-            <a href="/">Home</a>
-
-        </div>
-    </div>
-    {% if user.is_authenticated %}
-
-    {% if request.user.profile.profile_pic %}
-    <section> <img
-            style="border-radius: 50% ; padding: 0.15rem;   background: linear-gradient(to right bottom, #2cd8a4, #2ec97b);"
-            class=" img-circle" src="{{request.user.profile.profile_pic.url}}" alt="" width="50px" height="50px"">  </section> <br>
-                {% else %}
-                     
-                {% endif %}
-
-                <div class=" dropdown">
-        <button class="btn btn-sm dropdown-toggle" type="button" id="dropdownMenuButton btn-2" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            <h6><a href="#" style="color: white;">{{ user.username}}</a></h6>
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
-        </div>
-        </div>
-        <a href="{% url 'new-project' %}"><button id="btn-2">Submit Project</button></a>
-
-        {% else %}
-
-        <button class="btn-2"> <a href="#"><i style="color:blue;" class="fa fa-settings fa-2x"></i></a> <a
-                href="/accounts/login" style="color: white;">Log In</a> </button>
-
-
-        {% endif %}
-        <div class="red" id="ohmy">
-
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Awards</a>
         </div>
 
-        <div id="mySidenav" class="sidenav">
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"></a>
-            <hr>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/">Home <span class="sr-only">(current)</span></a></li>
+                <li><a href="#"> <img style="border-radius: 50% ; padding: 0.15rem; " class=" img-circle"
+                            src="{{request.user.profile.profile_pic.url}}" alt="" width="30px" height="30px"> </a></li>
 
-        </div>
+            </ul>
 
-        <div class="col-sm-6 col-md-6">
-            {% if user.is_authenticated %}
-            <ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li> <a href="{% url 'profile' %}">Profile</a></li>
+
+                <li><a href="{% url 'new-project' %}">Submit Project</a></li>
+                {% if user.is_authenticated %}
+
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle btn btn-default" data-toggle="dropdown" role="button"
-                        aria-expanded="false">Account
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu" role="menu">
-                       
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                        aria-expanded="false">Account<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
                         <li>
                             <a href="/accounts/password/change">Change Password</a>
                         </li>
+
                         <li>
                             <a href="/logout">Logout</a>
                         </li>
+                        {% else %}
+                        <li>
+                            <a href="/accounts/login">Login</a>
+                        </li>
+
+                        {% endif %}
+
+
                     </ul>
                 </li>
             </ul>
-            {% else %}
-            <li>
-                <a class='btn btn-default' href="/accounts/login">Login</a>
-            </li>
-
-            {% endif %}
-        </div>
-
-
-
-        <script>
-            function openNav() {
-                document.getElementById("mySidenav").style.width = "250px";
-                document.getElementById("main").style.marginLeft = "0px";
-                document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
-            }
-
-            function closeNav() {
-                document.getElementById("mySidenav").style.width = "0";
-                document.getElementById("main").style.marginLeft = "0";
-                document.body.style.backgroundColor = "white";
-            }
-        </script>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
 </nav>
