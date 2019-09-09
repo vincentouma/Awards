@@ -1,19 +1,21 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
-from django.http  import HttpResponse
+from django.http  import HttpResponse,Http404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
+from tinymce.models import HTMLField
 from .forms import  *
 from .models import *
 # Create your views here.
 
 def home(request):
-   
-    return render(request, 'home.html',
-    )
-
+   current_user = request.user
+   projects = Projects
+   return render(request,'home.html',{'projects':projects})
+    
+@login_required(login_url='/accounts/login/')
 def profile(request):
     if request.method == 'POST':
         form = ProjectForm(request.POST,request.FILES)
@@ -28,10 +30,10 @@ def profile(request):
         my_profile = Profile.objects.all()
     return render(request,'profile.html', locals())    
 
-
+@login_required(login_url='/accounts/login/')
 def new_projects(request):
     current_user = request.user
-    profile = Profile.objects.get(user=current_user)
+    profile = Profile.objects.get(user_id =current_user)
     if request.method == 'POST':
         form = ProjectForm(request.POST, request.FILES)
         if form.is_valid():
@@ -45,8 +47,8 @@ def new_projects(request):
         form = ProjectsForm()
     return render(request, 'new_project.html', {"form": form})
 
-
-def projects(request,id):
+@login_required(login_url='/accounts/login/')
+def projects(request,id):    
     post=Project.objects.get(id=id)
     votes = Votes.objects.filter(post=post)
     form = Votess()
@@ -109,6 +111,6 @@ def search_results(request):
 
     else:
         message = "You haven't searched for any term"
-        return render(request, 'all-posts/search.html',{"message":message})    
+        return render(request, 'search.html',{"message":message})    
 
 
