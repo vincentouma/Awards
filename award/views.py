@@ -16,7 +16,6 @@ def home(request):
     all_project = Project.fetch_all_images()
     return render(request,"home.html",{"all_images":all_project})
     
-@login_required(login_url='/accounts/login/')
 def new_profile(request):
     current_user = request.user
     if request.method == 'POST':

@@ -36,14 +36,15 @@
    <div class="row" style="margin-top:30px;">
        {% for image in all_images%}
 
-       <div class="col-md-5 main-page d-flex" style=" margin-top: 40px; margin-bottom:50px;">
+       <div class="col-md-5 main-page d-flex"  style=" margin-top: 40px; margin-bottom:50px;">
            <div class="card card-cascade wider flex-fill ">
 
                <!-- Card image -->
-               <div class="view view-cascade overlay">
+               <div class="">
                    <a data-toggle="modal" data-target="#{{image.id}}"><img class="card-img-top"
-                           src="{{image.image.url}}" alt="{{image.title}}"></a>
+                           src="{{image.image.url}}" alt="{{image.title}}" height="250px" width="300px"></a>
                </div>
+               <div class=""></div>
                <!--Card content-->
                <div class="card-body">
 
@@ -58,6 +59,7 @@
                </div>
            </div>
        </div>
+       <div col-md-5 main-page d-flex ></div>
        <!--Modal: modalYT-->
        <div class="modal fade" id="{{image.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
            aria-hidden="true">
@@ -70,7 +72,8 @@
            </div>
        </div>
        <!--Modal: modalYT-->
-
+<br>
+<br>
 
        {% empty %}
    
