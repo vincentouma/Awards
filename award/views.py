@@ -60,15 +60,16 @@ def profile(request):
 @login_required(login_url='/accounts/login/')
 def new_projects(request):
     current_user = request.user
-    profile = Profile.objects.get(user_id =current_user)
+    profile = Profile.objects.get(prof_user =current_user)
     if request.method == 'POST':
-        form = ProjectForm(request.POST, request.FILES)
+        form = ProjectsForm(request.POST, request.FILES)
         if form.is_valid():
             project = form.save(commit=False)
             project.user = current_user
             project.profile = profile
             project.save()
-        return redirect('index')
+        print(project)
+        return redirect('home')
 
     else:
         form = ProjectsForm()
