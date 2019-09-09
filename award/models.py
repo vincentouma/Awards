@@ -30,10 +30,15 @@ class Projects(models.Model):
 
 
 class Profile(models.Model):
-    name = models.CharField(max_length =30,null=True)
-    profile_photo = models.ImageField(upload_to = 'pics/')
-    bio = models.TextField(max_length=100,blank=True)
-    user_id = models.OneToOneField(User,on_delete=models.CASCADE)
+    profile_picture = models.ImageField(upload_to='prof_pics/',blank=True)
+    prof_user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
+    bio = models.TextField(default="")
+    contact_info = models.CharField(max_length=200,blank=True)
+    profile_Id = models.IntegerField(default=0)
+    all_projects = models.ForeignKey('Projects',on_delete=models.CASCADE,null=True)
+
+    def __str__(self):
+        return self.bio
 
     def save_profile(self):
         self.save()
@@ -41,22 +46,9 @@ class Profile(models.Model):
     def delete_profile(self):
         self.delete()
 
-    def save_user(self):
+    def update_bio(self,bio):
+        self.bio = bio
         self.save()
-
-    @classmethod
-    def search_user(cls,username):
-        searched_user = User.objects.get(username = username)
-        return searched_user
-
-    @classmethod
-    def get_profiles(cls):
-        profiles = cls.objects.all()
-        return profiles
-
-    def __str__(self):
-        return self.user_id.username
-
 
 class Rates(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
@@ -65,7 +57,7 @@ class Rates(models.Model):
     usability = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(10)],null=True)
     creativity = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(10)])
     content = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(10)])
-
+git 
     def save_rate(self):
             self.save()
 
