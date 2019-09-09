@@ -2,31 +2,36 @@
 {% load staticfiles %}
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <link href="https://fonts.googleapis.com/css?family=Mali" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="shortcut icon"  href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFb_ovSNHKWPLzFkvwbThu7ETO3rtd4b5goVCWBCuFTE_1exwOGA"/>
+  <link rel="shortcut icon"
+    href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFb_ovSNHKWPLzFkvwbThu7ETO3rtd4b5goVCWBCuFTE_1exwOGA" />
   {% if title %}
   <title>Awards - {{title}}</title>
   {% else %}
 
-    <title>Awards</title>
+  <title>Awards</title>
   {% endif %}
-    {% block styles %}
-        {% bootstrap_css %}
-        <link rel="stylesheet" href="{% static 'css/proj.css' %}">
+  {% block styles %}
+  {% bootstrap_css %}
+  <link rel="stylesheet" href="{% static 'css/proj.css' %}">
 
-    {% endblock %}
+  {% endblock %}
 
 
 </head>
+
 <body>
-        {% include "navbar.html" %}
-    {% block content %}  {%endblock%}
-    {% block scripts %}
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    {% bootstrap_javascript %}
-{% endblock %}
+  {% include "navbar.html" %}
+  {% block content %}
+  {%endblock%}
+  {% block scripts %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  {% bootstrap_javascript %}
+  {% endblock %}
 </body>
+
 </html>

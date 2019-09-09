@@ -47,14 +47,14 @@ def profile_edit(request):
 @login_required(login_url='/accounts/login/')
 def profile(request):
     current_user = request.user
-    projects = Projects.objects.filter(user = current_user)
+    project = Project.objects.filter(user = current_user)
 
     try:   
         prof = Profile.objects.get(prof_user=current_user)
     except ObjectDoesNotExist:
         return redirect('new_profile')
 
-    return render(request,'profile/profile.html',{'profile':prof,'projects':projects})
+    return render(request,'profile/profile.html',{'profile':prof,'project':project})
 
 
 @login_required(login_url='/accounts/login/')
@@ -69,7 +69,7 @@ def new_project(request):
         return redirect('home')
     else:
         form = ProjectForm()
-    return render(request,"project.html",{"form":form})
+    return render(request,"projects.html",{"form":form})
 
 @login_required(login_url='/accounts/login/')
 def project_review(request,project_id):
